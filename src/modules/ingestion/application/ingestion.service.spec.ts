@@ -45,7 +45,10 @@ describe('IngestionService', () => {
         VehicleCatalogTransformer,
         { provide: NhtsaApiClient, useValue: mockApiClient },
         { provide: VehicleCatalogRepository, useValue: mockRepository },
-        { provide: ConfigService, useValue: { get: jest.fn().mockReturnValue(50) } },
+        {
+          provide: ConfigService,
+          useValue: { get: jest.fn().mockReturnValue(50) },
+        },
       ],
     }).compile();
 

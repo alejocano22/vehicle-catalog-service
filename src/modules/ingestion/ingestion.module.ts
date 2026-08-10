@@ -8,8 +8,12 @@ import { IngestionService } from './application/ingestion.service';
 
 @Module({
   imports: [HttpModule, forwardRef(() => VehiclesModule)],
-  providers: [NhtsaApiClient, XmlParserService, VehicleCatalogTransformer, IngestionService],
+  providers: [
+    NhtsaApiClient,
+    XmlParserService,
+    VehicleCatalogTransformer,
+    IngestionService,
+  ],
   exports: [IngestionService],
 })
-
-export class IngestionModule { }
+export class IngestionModule {}

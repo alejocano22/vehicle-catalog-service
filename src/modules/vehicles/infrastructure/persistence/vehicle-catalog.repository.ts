@@ -12,7 +12,7 @@ export class VehicleCatalogRepository {
   constructor(
     @InjectRepository(MakeEntity)
     private readonly makeRepository: Repository<MakeEntity>,
-  ) { }
+  ) {}
 
   // Persists the transformed catalog, upserting by makeId so re-running doesn't create duplicate makes
   async saveCatalog(catalog: MakeWithVehicleTypes[]): Promise<void> {

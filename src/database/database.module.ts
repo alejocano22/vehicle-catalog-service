@@ -22,5 +22,4 @@ import { VehicleTypeEntity } from '../modules/vehicles/infrastructure/persistenc
     }),
   ],
 })
-
 export class DatabaseModule {}

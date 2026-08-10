@@ -1,5 +1,8 @@
 import { VehicleCatalogTransformer } from './vehicle-catalog.transformer';
-import { NhtsaMakeXml, NhtsaVehicleTypeXml } from '../domain/nhtsa-response.types';
+import {
+  NhtsaMakeXml,
+  NhtsaVehicleTypeXml,
+} from '../domain/nhtsa-response.types';
 
 describe('VehicleCatalogTransformer', () => {
   let transformer: VehicleCatalogTransformer;
@@ -13,7 +16,10 @@ describe('VehicleCatalogTransformer', () => {
       const make: NhtsaMakeXml = { Make_ID: 440, Make_Name: 'ASTON MARTIN' };
       const vehicleTypes: NhtsaVehicleTypeXml[] = [
         { VehicleTypeId: 2, VehicleTypeName: 'Passenger Car' },
-        { VehicleTypeId: 7, VehicleTypeName: 'Multipurpose Passenger Vehicle (MPV)' },
+        {
+          VehicleTypeId: 7,
+          VehicleTypeName: 'Multipurpose Passenger Vehicle (MPV)',
+        },
       ];
 
       const result = transformer.transformMake(make, vehicleTypes);
@@ -51,7 +57,10 @@ describe('VehicleCatalogTransformer', () => {
         { Make_ID: 440, Make_Name: 'ASTON MARTIN' },
         { Make_ID: 441, Make_Name: 'TESLA' },
       ];
-      const vehicleTypesByMakeId = new Map<number, NhtsaVehicleTypeXml[] | undefined>([
+      const vehicleTypesByMakeId = new Map<
+        number,
+        NhtsaVehicleTypeXml[] | undefined
+      >([
         [440, [{ VehicleTypeId: 2, VehicleTypeName: 'Passenger Car' }]],
         [441, [{ VehicleTypeId: 7, VehicleTypeName: 'MPV' }]],
       ]);
@@ -64,8 +73,13 @@ describe('VehicleCatalogTransformer', () => {
     });
 
     it('handles a make missing from the lookup map (failed fetch) as empty vehicleTypes', () => {
-      const makes: NhtsaMakeXml[] = [{ Make_ID: 440, Make_Name: 'ASTON MARTIN' }];
-      const vehicleTypesByMakeId = new Map<number, NhtsaVehicleTypeXml[] | undefined>();
+      const makes: NhtsaMakeXml[] = [
+        { Make_ID: 440, Make_Name: 'ASTON MARTIN' },
+      ];
+      const vehicleTypesByMakeId = new Map<
+        number,
+        NhtsaVehicleTypeXml[] | undefined
+      >();
 
       const result = transformer.transformCatalog(makes, vehicleTypesByMakeId);
 
@@ -77,7 +91,10 @@ describe('VehicleCatalogTransformer', () => {
         { Make_ID: 2, Make_Name: 'B_MAKE' },
         { Make_ID: 1, Make_Name: 'A_MAKE' },
       ];
-      const vehicleTypesByMakeId = new Map<number, NhtsaVehicleTypeXml[] | undefined>();
+      const vehicleTypesByMakeId = new Map<
+        number,
+        NhtsaVehicleTypeXml[] | undefined
+      >();
 
       const result = transformer.transformCatalog(makes, vehicleTypesByMakeId);
 

@@ -15,7 +15,8 @@ export class VehiclesResolver {
   ) {}
 
   @Query(() => [MakeGraphQLType], {
-    description: 'Returns the full stored vehicle catalog (makes with their vehicle types).',
+    description:
+      'Returns the full stored vehicle catalog (makes with their vehicle types).',
   })
   async makes(): Promise<MakeGraphQLType[]> {
     const entities = await this.repository.findAll();

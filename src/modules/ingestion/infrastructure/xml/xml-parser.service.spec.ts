@@ -1,5 +1,8 @@
 import { XmlParserService, XmlParsingError } from './xml-parser.service';
-import { NhtsaAllMakesResponse, NhtsaVehicleTypesResponse } from '../../domain/nhtsa-response.types';
+import {
+  NhtsaAllMakesResponse,
+  NhtsaVehicleTypesResponse,
+} from '../../domain/nhtsa-response.types';
 
 describe('XmlParserService', () => {
   let service: XmlParserService;

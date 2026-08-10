@@ -15,7 +15,9 @@ export class NhtsaApiClient {
     private readonly configService: ConfigService,
   ) {
     this.baseUrl = this.configService.get<string>('NHTSA_BASE_URL')!;
-    this.timeoutMs = this.configService.get<number>('NHTSA_REQUEST_TIMEOUT_MS')!;
+    this.timeoutMs = this.configService.get<number>(
+      'NHTSA_REQUEST_TIMEOUT_MS',
+    )!;
   }
 
   async getAllMakesXml(): Promise<string> {
@@ -42,7 +44,10 @@ export class NhtsaApiClient {
         `Failed to fetch NHTSA data from ${url}: ${axiosError.message}`,
         axiosError.stack,
       );
-      throw new NhtsaApiError(`Request to NHTSA API failed: ${url}`, axiosError);
+      throw new NhtsaApiError(
+        `Request to NHTSA API failed: ${url}`,
+        axiosError,
+      );
     }
   }
 }

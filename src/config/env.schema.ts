@@ -1,7 +1,9 @@
 import { z } from 'zod';
 
 export const envSchema = z.object({
-  NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
+  NODE_ENV: z
+    .enum(['development', 'test', 'production'])
+    .default('development'),
   PORT: z.coerce.number().int().positive().default(3000),
 
   // Database
@@ -12,11 +14,16 @@ export const envSchema = z.object({
   DB_NAME: z.string(),
 
   // External API
-  NHTSA_BASE_URL: z.string().url().default('https://vpic.nhtsa.dot.gov/api/vehicles'),
+  NHTSA_BASE_URL: z
+    .string()
+    .url()
+    .default('https://vpic.nhtsa.dot.gov/api/vehicles'),
   NHTSA_REQUEST_TIMEOUT_MS: z.coerce.number().int().positive().default(10000),
 
   // Logging
-  LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']).default('info'),
+  LOG_LEVEL: z
+    .enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace'])
+    .default('info'),
 
   // Ingestion
   INGESTION_MAKES_LIMIT: z.coerce.number().int().positive().default(50),

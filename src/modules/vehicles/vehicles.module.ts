@@ -14,5 +14,4 @@ import { IngestionModule } from '../ingestion/ingestion.module';
   providers: [VehicleCatalogRepository, VehiclesResolver],
   exports: [VehicleCatalogRepository],
 })
-
-export class VehiclesModule { }
+export class VehiclesModule {}

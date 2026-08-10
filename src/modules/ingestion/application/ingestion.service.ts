@@ -49,8 +49,12 @@ export class IngestionService {
       `Fetched ${makes.length} total makes, processing ${limitedMakes.length} (INGESTION_MAKES_LIMIT=${this.makesLimit})`,
     );
 
-    const vehicleTypesByMakeId = await this.fetchVehicleTypesForMakes(limitedMakes);
-    const catalog = this.transformer.transformCatalog(limitedMakes, vehicleTypesByMakeId);
+    const vehicleTypesByMakeId =
+      await this.fetchVehicleTypesForMakes(limitedMakes);
+    const catalog = this.transformer.transformCatalog(
+      limitedMakes,
+      vehicleTypesByMakeId,
+    );
 
     await this.repository.saveCatalog(catalog);
 
@@ -74,8 +78,12 @@ export class IngestionService {
         const xml = await this.nhtsaApiClient.getVehicleTypesForMakeXml(
           String(make.Make_ID),
         );
-        const parsed = this.xmlParserService.parse<NhtsaVehicleTypesResponse>(xml);
-        result.set(make.Make_ID, parsed.Response.Results.VehicleTypesForMakeIds);
+        const parsed =
+          this.xmlParserService.parse<NhtsaVehicleTypesResponse>(xml);
+        result.set(
+          make.Make_ID,
+          parsed.Response.Results.VehicleTypesForMakeIds,
+        );
       } catch (error) {
         this.logger.error(
           `Failed to fetch vehicle types for make ${make.Make_ID} (${make.Make_Name}); continuing with empty vehicleTypes`,
