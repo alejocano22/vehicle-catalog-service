@@ -18,7 +18,7 @@ export const envSchema = z.object({
     .string()
     .url()
     .default('https://vpic.nhtsa.dot.gov/api/vehicles'),
-  NHTSA_REQUEST_TIMEOUT_MS: z.coerce.number().int().positive().default(10000),
+  NHTSA_REQUEST_TIMEOUT_MS: z.coerce.number().int().positive().default(15000),
 
   // Logging
   LOG_LEVEL: z
