@@ -17,6 +17,9 @@ export const envSchema = z.object({
 
   // Logging
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']).default('info'),
+
+  // Ingestion
+  INGESTION_MAKES_LIMIT: z.coerce.number().int().positive().default(50),
 });
 
 export type EnvConfig = z.infer<typeof envSchema>;
