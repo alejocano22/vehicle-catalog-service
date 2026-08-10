@@ -1,8 +1,9 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NhtsaApiClient } from '../infrastructure/http/nhtsa-api.client';
 import { XmlParserService } from '../infrastructure/xml/xml-parser.service';
 import { VehicleCatalogTransformer } from './vehicle-catalog.transformer';
+import { VehicleCatalogRepository } from '../../vehicles/infrastructure/persistence/vehicle-catalog.repository';
 import {
   NhtsaAllMakesResponse,
   NhtsaVehicleTypesResponse,
@@ -20,10 +21,23 @@ export class IngestionService {
     private readonly nhtsaApiClient: NhtsaApiClient,
     private readonly xmlParserService: XmlParserService,
     private readonly transformer: VehicleCatalogTransformer,
+    private readonly repository: VehicleCatalogRepository,
     private readonly configService: ConfigService,
   ) {
     this.makesLimit = this.configService.get<number>('INGESTION_MAKES_LIMIT')!;
   }
+
+  // Runs ingestion once automatically when the application finishes bootstrapping
+  // async onApplicationBootstrap(): Promise<void> {
+  //   try {
+  //     await this.run();
+  //   } catch (error) {
+  //     this.logger.error(
+  //       'Automatic startup ingestion failed; the service will start anyway. Use the manual ingestion trigger to retry.',
+  //       error instanceof Error ? error.stack : undefined,
+  //     );
+  //   }
+  // }
 
   async run(): Promise<MakeWithVehicleTypes[]> {
     this.logger.log('Starting vehicle catalog ingestion');
@@ -36,10 +50,11 @@ export class IngestionService {
     );
 
     const vehicleTypesByMakeId = await this.fetchVehicleTypesForMakes(limitedMakes);
-
     const catalog = this.transformer.transformCatalog(limitedMakes, vehicleTypesByMakeId);
 
-    this.logger.log(`Ingestion complete: ${catalog.length} makes processed`);
+    await this.repository.saveCatalog(catalog);
+
+    this.logger.log(`Ingestion complete: ${catalog.length} makes persisted`);
     return catalog;
   }
 

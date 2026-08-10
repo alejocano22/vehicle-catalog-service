@@ -4,6 +4,7 @@ import { IngestionService } from './ingestion.service';
 import { NhtsaApiClient } from '../infrastructure/http/nhtsa-api.client';
 import { XmlParserService } from '../infrastructure/xml/xml-parser.service';
 import { VehicleCatalogTransformer } from './vehicle-catalog.transformer';
+import { VehicleCatalogRepository } from './../../vehicles/infrastructure/persistence/vehicle-catalog.repository';
 
 const ALL_MAKES_XML = `
   <Response>
@@ -25,6 +26,7 @@ const VEHICLE_TYPES_XML = `
 describe('IngestionService', () => {
   let service: IngestionService;
   let mockApiClient: jest.Mocked<NhtsaApiClient>;
+  let mockRepository: jest.Mocked<VehicleCatalogRepository>;
 
   beforeEach(async () => {
     mockApiClient = {
@@ -32,16 +34,18 @@ describe('IngestionService', () => {
       getVehicleTypesForMakeXml: jest.fn().mockResolvedValue(VEHICLE_TYPES_XML),
     } as unknown as jest.Mocked<NhtsaApiClient>;
 
+    mockRepository = {
+      saveCatalog: jest.fn().mockResolvedValue(undefined),
+    } as unknown as jest.Mocked<VehicleCatalogRepository>;
+
     const moduleRef = await Test.createTestingModule({
       providers: [
         IngestionService,
         XmlParserService,
         VehicleCatalogTransformer,
         { provide: NhtsaApiClient, useValue: mockApiClient },
-        {
-          provide: ConfigService,
-          useValue: { get: jest.fn().mockReturnValue(50) },
-        },
+        { provide: VehicleCatalogRepository, useValue: mockRepository },
+        { provide: ConfigService, useValue: { get: jest.fn().mockReturnValue(50) } },
       ],
     }).compile();
 
@@ -75,5 +79,16 @@ describe('IngestionService', () => {
     mockApiClient.getAllMakesXml.mockRejectedValue(new Error('NHTSA is down'));
 
     await expect(service.run()).rejects.toThrow('NHTSA is down');
+  });
+
+  it('persists the transformed catalog via the repository', async () => {
+    await service.run();
+
+    expect(mockRepository.saveCatalog).toHaveBeenCalledTimes(1);
+    expect(mockRepository.saveCatalog).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({ makeId: '440', makeName: 'ASTON MARTIN' }),
+      ]),
+    );
   });
 });
