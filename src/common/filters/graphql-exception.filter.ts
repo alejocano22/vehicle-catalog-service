@@ -1,4 +1,4 @@
-import { ArgumentsHost, Catch, Logger } from '@nestjs/common';
+import { Catch, Logger } from '@nestjs/common';
 import { GqlExceptionFilter } from '@nestjs/graphql';
 import { GraphQLError } from 'graphql';
 
@@ -6,7 +6,7 @@ import { GraphQLError } from 'graphql';
 export class GraphqlExceptionFilter implements GqlExceptionFilter {
   private readonly logger = new Logger(GraphqlExceptionFilter.name);
 
-  catch(exception: unknown, _host: ArgumentsHost): GraphQLError {
+  catch(exception: unknown): GraphQLError {
     const message =
       exception instanceof Error ? exception.message : 'Unexpected error';
     const stack = exception instanceof Error ? exception.stack : undefined;

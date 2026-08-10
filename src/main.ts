@@ -16,4 +16,7 @@ async function bootstrap() {
   logger.log(`Application started successfully on port ${port}`, 'Bootstrap');
 }
 
-bootstrap();
+bootstrap().catch((error: unknown) => {
+  console.error('Fatal error during application bootstrap:', error);
+  process.exit(1);
+});

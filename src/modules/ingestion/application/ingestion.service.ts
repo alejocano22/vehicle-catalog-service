@@ -1,4 +1,4 @@
-import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NhtsaApiClient } from '../infrastructure/http/nhtsa-api.client';
 import { XmlParserService } from '../infrastructure/xml/xml-parser.service';
