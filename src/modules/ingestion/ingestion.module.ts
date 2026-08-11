@@ -9,11 +9,13 @@ import { Agent as HttpAgent } from 'node:http';
 import { Agent as HttpsAgent } from 'node:https';
 
 @Module({
-  imports: [HttpModule.register({
-    httpAgent: new HttpAgent({ keepAlive: true }),
-    httpsAgent: new HttpsAgent({ keepAlive: true }),
-  }),
-  forwardRef(() => VehiclesModule),],
+  imports: [
+    HttpModule.register({
+      httpAgent: new HttpAgent({ keepAlive: true }),
+      httpsAgent: new HttpsAgent({ keepAlive: true }),
+    }),
+    forwardRef(() => VehiclesModule),
+  ],
   providers: [
     NhtsaApiClient,
     XmlParserService,
@@ -22,4 +24,4 @@ import { Agent as HttpsAgent } from 'node:https';
   ],
   exports: [IngestionService],
 })
-export class IngestionModule { }
+export class IngestionModule {}
