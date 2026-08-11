@@ -68,6 +68,12 @@ npm run start:dev
 
 The app boots on `http://localhost:3000`, GraphQL playground at `/graphql`. Same as above, you need to run the `triggerIngestion` mutation before there's anything in `makes`
 
+## CI
+
+GitHub Actions runs on every push and PR to `main`: lint, build, unit tests.
+
+Test DB credentials are pulled from repository secrets (`TEST_DB_USERNAME`, `TEST_DB_PASSWORD`). If you fork this repo and want the pipeline to run, add those two secrets under Settings → Secrets and variables → Actions.
+
 ## Running tests
 
 ```bash
